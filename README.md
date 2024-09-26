@@ -9,6 +9,7 @@ Works on Windows and Linux. Developed specifically on/for Fedora Linux.
 
 ## Dependences
 - .NET 8.0
+-   Earlier .NET versions work too, but WeatherAPIProj.csproj needs to be updated to target earlier .NET versions.
 
 ## Installation
 Simply clone the repository and run either build_win.bat or build_linux.sh depending on your operating system. The exe/dll will be created in bin/Release/publish.
