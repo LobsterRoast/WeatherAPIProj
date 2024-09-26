@@ -9,7 +9,7 @@ Works on Windows and Linux. Coded specifically on/for Fedora Linux.
 
 ## Dependences
 - .NET 8.0
-Working on this
+- Working on this
 
 ## Installation
 Simply clone the repository and run either build_win.bat or build_linux.sh depending on your operating system. The exe/dll will be created in bin/Release/publish.
