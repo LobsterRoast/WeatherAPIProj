@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Emojis/umbrella_with_rain_drops_3d.png"/>
+    <AvaloniaResource Include="Emojis/sun_3d.png"/>
+    <AvaloniaResource Include="Emojis/fog_3d.png"/>
+    <AvaloniaResource Include="Emojis/cloud_with_snow_3d.png"/>
+    <AvaloniaResource Include="Emojis/cloud_with_rain_3d.png"/>
+    <AvaloniaResource Include="Emojis/cloud_with_lightning_and_rain_3d.png"/>
+    <AvaloniaResource Include="gabe.jpg"/>
+    <None Update="Emojis\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <PackageReference Include="Avalonia" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
+  </ItemGroup>
+</Project>

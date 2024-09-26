@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeatherAPIProj"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="50"
+        x:Class="WeatherAPIProj.MainWindow"
+        x:DataType="local:MainWindow"
+        Title="Weather API"
+        MinWidth="800"
+        MaxWidth="800"
+        MinHeight="450"
+        MaxHeight="450">
+        <!-- Sets the background to a nice gradient -->
+        <Window.Background>
+                <LinearGradientBrush StartPoint="50%,0%" EndPoint="50%,100%">
+                        <GradientStop Offset="0" Color="#7ab8d0"/>
+                        <GradientStop Offset="1" Color="#1e81b0"/>
+                </LinearGradientBrush>
+        </Window.Background>
+        <!-- Declares a grid so that the program knows where to display things -->
+        <Grid 
+        RowDefinitions="Auto,Auto,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40" 
+        ColumnDefinitions="10,Auto,*,50"
+        x:Name="Root"
+        Background="Transparent">
+                <!-- Title -->
+                <TextBlock Text="Weather API" FontSize="50" Grid.Row="0" Grid.Column="1"/>
+                <TextBlock FontSize="25" Grid.Row="1" Grid.Column="1">
+                        <Run Text="Powered by"/>
+                        <Run Text="Avalonia" FontWeight="Bold"/>
+                        <Run Text="and"/>
+                        <Run Text="Open Meteo" FontWeight="Bold"/>
+                </TextBlock>
+                <!-- Content --> 
+                <!-- These are the text blocks that will display our information. By default, the top one says "Loading..."-->
+                <TextBlock Text="Loading..." Grid.Row="3" Grid.Column="1" FontSize="20" Name="locationBlock"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" FontSize="20" Name="precipitationBlock"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" FontSize="20" Name="tempBlock"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" FontSize="20" Name="highBlock"/>
+                <TextBlock Grid.Row="7" Grid.Column="1" FontSize="20" Name="lowBlock"/>
+                <TextBlock Grid.Row="8" Grid.Column="1" FontSize="20" Name="windBlock"/>
+                <!-- This is the image that will be displayed alongside the weather data -->
+                <Image Name="image" Grid.Row="5" Grid.Column="2" Width="300" Height="300"/>
+                <!-- This is a button that will close the app. I intended it to be borderless but things didn't work out.
+                Technically this button is obselete now but I didn't feel like deleting it.-->
+                <Button Grid.Column="3" Width="40" Height="40" Command="{Binding CloseApp}">
+                        <Button.Styles>
+                                <Style Selector="Button">
+                                </Style>
+                        </Button.Styles>
+                        <TextBlock Text="X"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20"/>
+                </Button>
+                <ScrollViewer Grid.Row="1">
+                <ItemsControl>
+                </ItemsControl>
+                </ScrollViewer>
+        </Grid>
+</Window>
