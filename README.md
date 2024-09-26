@@ -8,6 +8,7 @@ This is a weather API interface written in C# and XAML. It uses the Avalonia pla
 Works on Windows and Linux. Coded specifically on/for Fedora Linux.
 
 ## Dependences
+- .NET 8.0
 Working on this
 
 ## Installation
