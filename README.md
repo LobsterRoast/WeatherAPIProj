@@ -5,11 +5,10 @@ This is a weather API interface written in C# and XAML. It uses the Avalonia pla
 *Note for teacher: Much of the project is just a template. See **MainWindow.axaml.cs** and **MainWindow.axaml** for the stuff I coded personally.*
 
 ## Compatibility
-Works on Windows and Linux. Coded specifically on/for Fedora Linux.
+Works on Windows and Linux. Developed specifically on/for Fedora Linux.
 
 ## Dependences
 - .NET 8.0
-- Working on this
 
 ## Installation
 Simply clone the repository and run either build_win.bat or build_linux.sh depending on your operating system. The exe/dll will be created in bin/Release/publish.
