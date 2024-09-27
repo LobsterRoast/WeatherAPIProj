@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System;
 using System.Threading.Tasks;
+using ScottPlot.Avalonia;
 
 
 namespace WeatherAPIProj;
@@ -20,6 +21,7 @@ public partial class MainWindow : Window
 
     // Declares a command binding usable in the XAML code
     public ReactiveCommand<Unit, Unit> CloseApp { get; }
+    public List<float> historicalTemperatures;
 
     // City and region are displayed in the application. Lat/Long are used to make API calls. These variables hold all their respective values found via. ipinfo.io.
     string? city;
@@ -43,6 +45,9 @@ public partial class MainWindow : Window
         CloseApp = ReactiveCommand.Create(CloseAppFunction);
         DataContext = this;
 
+        // Gets the current date to use in API calls. The year of startDate is set to 1940 because that is when the earliest weather data the API can provide is from.
+        DateTime dtCurrentDate = DateTime.Now;
+
         // These methods have to run asynchronously to avoid displaying null values.
         Dispatcher.UIThread.Post(async () => 
         {
@@ -57,9 +62,23 @@ public partial class MainWindow : Window
             );
             // Parses the weather data we just received into our weather variables
             await ParseWeatherJson();
-            // Sets the text blocks declared in XAML to display the weather data
             SetTextBlocks();
+            for (int i = 1940 + ((dtCurrentDate.Year-1) % 10); i <= (dtCurrentDate.Year-1); i += 5) {
+                string date = new DateTime(i, dtCurrentDate.Month, dtCurrentDate.Day).ToString("yyyy-MM-dd");
+                Console.WriteLine("Fetching weather data from " + date + "...");
+                await RunHttpRequest(
+                    "https://archive-api.open-meteo.com/v1/archive?latitude="+latitude+"&longitude="+longitude+
+                    "&start_date="+date+"&end_date="+date+"&daily=temperature_2m_mean"
+                );
+                historicalTemperatures.Add(root.GetProperty("daily").GetProperty("temperature_2m_mean").GetInt32());
+            }
+            // Sets the text blocks declared in XAML to display the weather data
         });
+        double[] dataX = { 1, 2, 3, 4, 5 };
+        double[] dataY = { 1, 4, 9, 16, 25 };
+        AvaPlot avaPlot1 = this.Find<AvaPlot>("AvaPlot1");
+        avaPlot1.Plot.Add.Scatter(dataX, dataY);
+        avaPlot1.Refresh();
     }
     void CloseAppFunction() {
         // Closes the application
