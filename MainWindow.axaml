@@ -55,8 +55,8 @@
                         VerticalAlignment="Center"
                         FontSize="20"/>
                 </Button>
-                <ScottPlot:AvaPlot Name="AvaPlot1" Grid.Row="10" Grid.Column="1" Width="500" Height="300"/>
-                <ScottPlot:AvaPlot Name="AvaPlot2" Grid.Row="10" Grid.Column="3" Width="500" Height="300"/>
+                <ScottPlot:AvaPlot Name="historicalPlot" Grid.Row="10" Grid.Column="1" Width="500" Height="300"/>
+                <ScottPlot:AvaPlot Name="forecastPlot" Grid.Row="10" Grid.Column="3" Width="500" Height="300"/>
                 <ScrollViewer Grid.Row="1">
                 <ItemsControl>
                 </ItemsControl>
