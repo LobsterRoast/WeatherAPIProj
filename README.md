@@ -11,9 +11,23 @@ Works on Windows and Linux. Developed specifically on/for Fedora Linux.
 - .NET 8.0
 -   Earlier .NET versions work too, but WeatherAPIProj.csproj needs to be updated to target earlier .NET versions.
 
-## Installation
-Simply clone the repository and run either build_win.bat or build_linux.sh depending on your operating system. The exe/dll will be created in the ./build directory.
-Note: This targets  .NET 8.0 by default. You may need to edit WeatherAPIProj.csproj to target a different version of .NET depending on what works for you and your environment.
+## Installion
+### Linux
+```bash
+./build_linux.sh
+cd ./build
+dotnet WeatherAPIProj.dll
+```
+### Windows
+```shell
+# This can all be done in File Explorer too
+./build_win.bat
+cd ./build
+./WeatherAPIProj.exe
+```
+
+
+**Note:** This targets  .NET 8.0 by default. You may need to edit WeatherAPIProj.csproj to target a different version of .NET depending on what works for you and your environment.
 
 ## Resources used:
 - [Avalonia](https://avaloniaui.net/)
