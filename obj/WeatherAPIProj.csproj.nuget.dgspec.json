@@ -1,26 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "/home/lobsterroast/Documents/WeatherAPIProj/WeatherAPIProj.csproj": {}
+    "D:\\Users\\jekam\\Documents\\WeatherAPIProj\\WeatherAPIProj.csproj": {}
   },
   "projects": {
-    "/home/lobsterroast/Documents/WeatherAPIProj/WeatherAPIProj.csproj": {
+    "D:\\Users\\jekam\\Documents\\WeatherAPIProj\\WeatherAPIProj.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/lobsterroast/Documents/WeatherAPIProj/WeatherAPIProj.csproj",
+        "projectUniqueName": "D:\\Users\\jekam\\Documents\\WeatherAPIProj\\WeatherAPIProj.csproj",
         "projectName": "WeatherAPIProj",
-        "projectPath": "/home/lobsterroast/Documents/WeatherAPIProj/WeatherAPIProj.csproj",
-        "packagesPath": "/home/lobsterroast/.nuget/packages/",
-        "outputPath": "/home/lobsterroast/Documents/WeatherAPIProj/obj/",
+        "projectPath": "D:\\Users\\jekam\\Documents\\WeatherAPIProj\\WeatherAPIProj.csproj",
+        "packagesPath": "C:\\Users\\jekam\\.nuget\\packages\\",
+        "outputPath": "D:\\Users\\jekam\\Documents\\WeatherAPIProj\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/lobsterroast/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\jekam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/discord-net/api/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
@@ -88,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

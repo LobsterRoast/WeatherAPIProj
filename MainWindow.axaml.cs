@@ -7,9 +7,11 @@ using Avalonia.Media.Imaging;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Linq;
 using System;
 using System.Threading.Tasks;
 using ScottPlot.Avalonia;
+using ScottPlot;
 
 
 namespace WeatherAPIProj;
@@ -39,6 +41,10 @@ public partial class MainWindow : Window
     double? windSpeed;
     string? qualitativePrecipitation;
 
+    // Variables to control the graphs 
+    AvaPlot apHistoricalPlot;
+    AvaPlot apForecastPlot;
+
     // Class to represent the window that the user sees
     public MainWindow()
     {
@@ -47,7 +53,13 @@ public partial class MainWindow : Window
         // Defines the command binding we made earlier. When the command is run, it will execute CloseAppFunction()
         CloseApp = ReactiveCommand.Create(CloseAppFunction);
         DataContext = this;
+        
+        // Initializes the graphs in code
+        InitializeGraphs();
+        StylizeGraphs();
 
+        apHistoricalPlot.Refresh();
+        apForecastPlot.Refresh();
         // Gets the current date to use in API calls. The year of startDate is set to 1940 because that is when the earliest weather data the API can provide is from.
         
 
@@ -67,7 +79,7 @@ public partial class MainWindow : Window
             await ParseWeatherJson();
             // Sets the text blocks declared in XAML to display the weather data
             SetTextBlocks();
-            DateTime dtCurrentDate = DateTime.Now;
+            DateTime dtCurrentDate = DateTime.Today;
             for (int i = 1940 + ((dtCurrentDate.Year-1) % 10); i <= (dtCurrentDate.Year-1); i += 5) {
                 string date = new DateTime(i, dtCurrentDate.Month, dtCurrentDate.Day).ToString("yyyy-MM-dd");
                 Console.WriteLine("Fetching weather data from " + date + "...");
@@ -84,23 +96,59 @@ public partial class MainWindow : Window
                 "https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+
                 "&daily=temperature_2m_max,temperature_2m_min"
             );
-            Console.WriteLine(root.ToString());
             SetForecastPlot();
         });
     }
 
+
     int SetHistoricalPlot() {
-        AvaPlot historicalPlot = this.Find<AvaPlot>("historicalPlot");
-        historicalPlot.Plot.Add.Scatter(yearsOfData, historicalTemperatures);
-        historicalPlot.Plot.Axes.SetLimits(yearsOfData[0], yearsOfData[yearsOfData.Count-1], historicalTemperatures[0], historicalTemperatures[historicalTemperatures.Count-1]);
-        historicalPlot.Plot.Axes.AutoScaleX();
-        historicalPlot.Plot.Axes.AutoScaleY();
-        historicalPlot.Refresh();
+        apHistoricalPlot.Plot.Axes.SetLimits(yearsOfData[0], yearsOfData[yearsOfData.Count-1], historicalTemperatures[0], historicalTemperatures[historicalTemperatures.Count-1]);
+        apHistoricalPlot.Plot.Title("Yearly temperature at this time since " + yearsOfData[0]);
+        apHistoricalPlot.Plot.Axes.SetLimitsY(-50, 50);
+        apHistoricalPlot.Plot.Axes.AutoScaleExpandY();
+        apHistoricalPlot.Plot.Add.Scatter(yearsOfData, historicalTemperatures);
+        double[] dYearsOfData = yearsOfData.Select(i => (double)i).ToArray();
+        string[] sYearsOfData = yearsOfData.Select(i => i.ToString()).ToArray();
+        apHistoricalPlot.Plot.Axes.Bottom.SetTicks(dYearsOfData, sYearsOfData);
+        apHistoricalPlot.Refresh();
+        return 0;
+    }
+    int InitializeGraphs() {
+        apHistoricalPlot = this.Find<AvaPlot>("historicalPlot");
+        apForecastPlot = this.Find<AvaPlot>("forecastPlot");
+        apHistoricalPlot.Plot.Title("Making API calls. This may take a minute...");
+        apForecastPlot.Plot.Title("Making API calls. This may take a minute...");
+        return 0;
+    }
+    int StylizeGraphs() {
+        // Change the Forecast Plot to use dates as its X axis
+        apForecastPlot.Plot.Axes.DateTimeTicksBottom();
+
+        // Change the frame and interior colors of the plots
+        apHistoricalPlot.Plot.FigureBackground.Color = Color.FromHex("#333333");
+        apHistoricalPlot.Plot.DataBackground.Color = Color.FromHex("#1f1f1f");
+        apForecastPlot.Plot.FigureBackground.Color = Color.FromHex("#333333");
+        apForecastPlot.Plot.DataBackground.Color = Color.FromHex("#1f1f1f");
+
+        // Change the colors of the axes and grid
+        apHistoricalPlot.Plot.Axes.Color(Color.FromHex("#eeeeee"));
+        apHistoricalPlot.Plot.Grid.MajorLineColor = Color.FromHex("#404040");
+        apForecastPlot.Plot.Axes.Color(Color.FromHex("#eeeeee"));
+        apForecastPlot.Plot.Grid.MajorLineColor = Color.FromHex("#404040");
+
+        // Change the colors of the legends
+        apHistoricalPlot.Plot.Legend.BackgroundColor = Color.FromHex("#404040");
+        apHistoricalPlot.Plot.Legend.FontColor = Color.FromHex("#d7d7d7");
+        apHistoricalPlot.Plot.Legend.OutlineColor = Color.FromHex("#d7d7d7");
+        apForecastPlot.Plot.Legend.BackgroundColor = Color.FromHex("#404040");
+        apForecastPlot.Plot.Legend.FontColor = Color.FromHex("#d7d7d7");
+        apForecastPlot.Plot.Legend.OutlineColor = Color.FromHex("#d7d7d7");
+
         return 0;
     }
 
     int SetForecastPlot() {
-        DateTime dtCurrentDate = DateTime.Now;
+        DateTime dtCurrentDate = DateTime.Today;
         DateTime[] dates = {
             dtCurrentDate,
             dtCurrentDate.AddDays(1),
@@ -112,15 +160,18 @@ public partial class MainWindow : Window
         };
         for (int i = 0; i < 7; i++) {
             forecastedMaxTemps[i] = root.GetProperty("daily").GetProperty("temperature_2m_max")[i].GetDouble();
-            forecastedMinTemps[i] = root.GetProperty("daily").GetProperty("temperature_2m_max")[i].GetDouble();
+            forecastedMinTemps[i] = root.GetProperty("daily").GetProperty("temperature_2m_min")[i].GetDouble();
         }
-        AvaPlot forecastPlot = this.Find<AvaPlot>("forecastPlot");
-        forecastPlot.Plot.Add.Scatter(dates, forecastedMaxTemps);
-        forecastPlot.Plot.Add.Scatter(dates, forecastedMinTemps);
-        forecastPlot.Plot.Axes.DateTimeTicksBottom();
-        forecastPlot.Plot.Axes.AutoScaleX();
-        forecastPlot.Plot.Axes.AutoScaleY();
-        forecastPlot.Refresh();
+        
+        apForecastPlot.Plot.Axes.SetLimitsY(-50, 50);
+        apForecastPlot.Plot.Axes.AutoScaleExpandY();
+        var min = apForecastPlot.Plot.Add.Scatter(dates, forecastedMinTemps);
+        min.LegendText = "Min";
+        var max = apForecastPlot.Plot.Add.Scatter(dates, forecastedMaxTemps);
+        max.LegendText = "Max";
+        apForecastPlot.Plot.Axes.AutoScaleX();
+        apForecastPlot.Plot.Title("7 day forecast for this week (highs and lows)");
+        apForecastPlot.Refresh();
         return 0;
     }
 

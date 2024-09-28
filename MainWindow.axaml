@@ -14,9 +14,10 @@
         MaxHeight="900">
         <!-- Sets the background to a nice gradient -->
         <Window.Background>
-                <LinearGradientBrush StartPoint="50%,0%" EndPoint="50%,100%">
+                <LinearGradientBrush StartPoint="20%,0%" EndPoint="80%,100%">
                         <GradientStop Offset="0" Color="#7ab8d0"/>
-                        <GradientStop Offset="1" Color="#1e81b0"/>
+                        <GradientStop Offset="0.2" Color="#8888ef"/>
+                        <GradientStop Offset="1" Color="#efac88"/>
                 </LinearGradientBrush>
         </Window.Background>
         <!-- Declares a grid so that the program knows where to display things -->

@@ -15,12 +15,12 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WeatherAPIProj
-build_property.ProjectDir = /home/lobsterroast/Documents/WeatherAPIProj/
+build_property.ProjectDir = D:\Users\jekam\Documents\WeatherAPIProj\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
-[/home/lobsterroast/Documents/WeatherAPIProj/App.axaml]
+[D:/Users/jekam/Documents/WeatherAPIProj/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/home/lobsterroast/Documents/WeatherAPIProj/MainWindow.axaml]
+[D:/Users/jekam/Documents/WeatherAPIProj/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
