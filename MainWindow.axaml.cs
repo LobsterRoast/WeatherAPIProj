@@ -80,9 +80,13 @@ public partial class MainWindow : Window
             // Sets the text blocks declared in XAML to display the weather data
             SetTextBlocks();
             DateTime dtCurrentDate = DateTime.Today;
+
+            // Fetches data dating back to the 40s. No data available for the present year. To ensure neat
+            // intervals of data, the first year that data will be retrieved from is the year of the 1940s
+            // with the same 1's digit as the year previous to the current one. Data is collected from every
+            // fifth year.
             for (int i = 1940 + ((dtCurrentDate.Year-1) % 10); i <= (dtCurrentDate.Year-1); i += 5) {
                 string date = new DateTime(i, dtCurrentDate.Month, dtCurrentDate.Day).ToString("yyyy-MM-dd");
-                Console.WriteLine("Fetching weather data from " + date + "...");
                 await RunHttpRequest(
                     "https://archive-api.open-meteo.com/v1/archive?latitude="+latitude+"&longitude="+longitude+
                     "&start_date="+date+"&end_date="+date+"&daily=temperature_2m_mean"
@@ -90,8 +94,8 @@ public partial class MainWindow : Window
                 historicalTemperatures.Add(root.GetProperty("daily").GetProperty("temperature_2m_mean")[0].GetDouble());
                 yearsOfData.Add(i);
             } 
-            Console.WriteLine("Done obtaining historical data.");
             SetHistoricalPlot();
+            // Retrieve 7-day weather forecast
             await RunHttpRequest(
                 "https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+
                 "&daily=temperature_2m_max,temperature_2m_min"
@@ -101,19 +105,29 @@ public partial class MainWindow : Window
     }
 
 
+    // Handles all code related to the Historical Weather Data graph
     int SetHistoricalPlot() {
-        apHistoricalPlot.Plot.Axes.SetLimits(yearsOfData[0], yearsOfData[yearsOfData.Count-1], historicalTemperatures[0], historicalTemperatures[historicalTemperatures.Count-1]);
         apHistoricalPlot.Plot.Title("Yearly temperature at this time since " + yearsOfData[0]);
+
+        // The limits of the axes will be used to properly scale the graph
+        apHistoricalPlot.Plot.Axes.SetLimitsX(yearsOfData[0], yearsOfData[yearsOfData.Count-1]);
         apHistoricalPlot.Plot.Axes.SetLimitsY(-50, 50);
         apHistoricalPlot.Plot.Axes.AutoScaleExpandY();
+
+        // Plots the actual data on the graph
         apHistoricalPlot.Plot.Add.Scatter(yearsOfData, historicalTemperatures);
+
+        // yearsOfData must be converted to a double[] and a string[] to work with the SetTicks() method
         double[] dYearsOfData = yearsOfData.Select(i => (double)i).ToArray();
         string[] sYearsOfData = yearsOfData.Select(i => i.ToString()).ToArray();
+
+        // Sets the ticks to work neatly with the years of data collected
         apHistoricalPlot.Plot.Axes.Bottom.SetTicks(dYearsOfData, sYearsOfData);
         apHistoricalPlot.Refresh();
         return 0;
     }
     int InitializeGraphs() {
+        // Initializes the AvaPlot variables and sets their titles to placeholders while the data is retrieved
         apHistoricalPlot = this.Find<AvaPlot>("historicalPlot");
         apForecastPlot = this.Find<AvaPlot>("forecastPlot");
         apHistoricalPlot.Plot.Title("Making API calls. This may take a minute...");
@@ -148,7 +162,10 @@ public partial class MainWindow : Window
     }
 
     int SetForecastPlot() {
+        // Gets the current date
         DateTime dtCurrentDate = DateTime.Today;
+
+        // Creates an array with all the dates that weather data is collected for
         DateTime[] dates = {
             dtCurrentDate,
             dtCurrentDate.AddDays(1),
@@ -158,15 +175,21 @@ public partial class MainWindow : Window
             dtCurrentDate.AddDays(5),
             dtCurrentDate.AddDays(6)
         };
+
         for (int i = 0; i < 7; i++) {
             forecastedMaxTemps[i] = root.GetProperty("daily").GetProperty("temperature_2m_max")[i].GetDouble();
             forecastedMinTemps[i] = root.GetProperty("daily").GetProperty("temperature_2m_min")[i].GetDouble();
         }
         
+        // Sets the limits to be used when the graph is scaled
         apForecastPlot.Plot.Axes.SetLimitsY(-50, 50);
         apForecastPlot.Plot.Axes.AutoScaleExpandY();
+
+        // Creates the minimum temps line
         var min = apForecastPlot.Plot.Add.Scatter(dates, forecastedMinTemps);
         min.LegendText = "Min";
+
+        // Creates the maximum temps line
         var max = apForecastPlot.Plot.Add.Scatter(dates, forecastedMaxTemps);
         max.LegendText = "Max";
         apForecastPlot.Plot.Axes.AutoScaleX();
