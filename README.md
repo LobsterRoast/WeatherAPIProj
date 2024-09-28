@@ -11,7 +11,7 @@ Works on Windows and Linux. Developed specifically on/for Fedora Linux.
 - .NET 8.0
 -   Earlier .NET versions work too, but WeatherAPIProj.csproj needs to be updated to target earlier .NET versions.
 
-## Installion
+## Installation
 ### Linux
 ```bash
 ./build_linux.sh
